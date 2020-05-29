@@ -1,0 +1,22 @@
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	font-family: sans-serif;
+}
+
+h1 {
+	margin: 1em 0;
+	text-align: center;
+}
+
+canvas {
+	display: block; /* inline by default */
+	width: 300px;
+	height: 300px;
+
+	margin: 0 auto;
+	border: 1px solid #868686;
+}
