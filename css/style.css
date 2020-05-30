@@ -14,8 +14,7 @@ h1 {
 
 canvas {
 	display: block; /* inline by default */
-	width: 300px;
-	height: 300px;
+	/* height is set in html due to scaling issues */
 
 	margin: 0 auto;
 	border: 1px solid #868686;
