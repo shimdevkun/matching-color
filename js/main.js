@@ -11,9 +11,16 @@ let square = {
 	color: '#6a82a6',
 };
 
+let buttons = document.querySelectorAll('.btn');
+
 // Events
 document.addEventListener('keydown', keyDown);
 document.addEventListener('keyup', keyUp);
+
+buttons.forEach((btn) => {
+	btn.addEventListener('mousedown', move);
+	btn.addEventListener('mouseup', stop);
+});
 
 update();
 
@@ -39,6 +46,26 @@ function keyDown(e) {
 	}
 }
 
+function move(e) {
+	let classList = e.target.classList;
+
+	if (classList.contains('btn--up') || classList.contains('arrow--up')) {
+		moveUp();
+	}
+
+	if (classList.contains('btn--left') || classList.contains('arrow--left')) {
+		moveLeft();
+	}
+
+	if (classList.contains('btn--down') || classList.contains('arrow--down')) {
+		moveDown();
+	}
+
+	if (classList.contains('btn--right') || classList.contains('arrow--right')) {
+		moveRight();
+	}
+}
+
 function moveRight() {
 	square.dx = square.speed;
 }
@@ -55,6 +82,11 @@ function moveDown() {
 	square.dy = square.speed;
 }
 
+function stop() {
+	square.dx = 0;
+	square.dy = 0;
+}
+
 function keyUp(e) {
 	if (
 		e.key === 'ArrowRight' ||
@@ -66,8 +98,7 @@ function keyUp(e) {
 		e.key === 'ArrowDown' ||
 		e.key === 'Down'
 	) {
-		square.dx = 0;
-		square.dy = 0;
+		stop();
 	}
 }
 
