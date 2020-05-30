@@ -5,6 +5,10 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Canvas</title>
 
+		<link
+			rel="stylesheet"
+			href="https://use.fontawesome.com/releases/v5.0.7/css/all.css"
+		/>
 		<link rel="stylesheet" href="css/style.css" />
 	</head>
 	<body>
@@ -12,6 +16,17 @@
 
 		<canvas width="300px" height="300px"></canvas>
 
+		<div class="controls">
+			<div class="controls__row">
+				<button class="btn btn--up"><i class="far fa-caret-square-up"></i></button>
+			</div>
+
+			<div class="controls__row">
+				<button class="btn btn--left"><i class="far fa-caret-square-left"></i></button
+				><button class="btn btn--down"><i class="far fa-caret-square-down"></i></button
+				><button class="btn btn--right"><i class="far fa-caret-square-right"></i></button>
+			</div>
+		</div>
 		<script src="js/main.js"></script>
 	</body>
 </html>
