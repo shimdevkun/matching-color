@@ -8,10 +8,15 @@ let square = {
 	dx: 0,
 	dy: 0,
 	speed: 6,
-	color: '#6a82a6',
+	color: '#122345',
 };
 
 let buttons = document.querySelectorAll('.btn');
+
+let time = document.querySelector('.time');
+let interval = '';
+
+let score = document.querySelector('.score');
 
 // Events
 document.addEventListener('keydown', keyDown);
@@ -23,15 +28,22 @@ buttons.forEach((btn) => {
 });
 
 update();
+setUpLevel();
+startLevel();
 
 // Functions
 function drawSquare() {
 	ctx.fillStyle = square.color;
 	ctx.fillRect(square.x, square.y, square.size, square.size);
+
+	ctx.strokeStyle = '#94cfff';
+	ctx.strokeRect(square.x, square.y, square.size, square.size);
 }
 
 function clear() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+	setUpLevel();
 }
 
 function keyDown(e) {
@@ -129,6 +141,44 @@ function newPos() {
 	square.y += square.dy;
 
 	checkCollision();
+}
+
+function setUpLevel() {
+	ctx.fillStyle = '#e0892b';
+	ctx.fillRect(0, 0, canvas.width, canvas.width / 2);
+
+	ctx.fillStyle = '#122345';
+	ctx.fillRect(0, canvas.height / 2, canvas.width, canvas.height / 2);
+}
+
+function startLevel() {
+	square.x = 0;
+	square.y = 0;
+	square.dx = 0;
+	square.dy = 0;
+
+	time.textContent = '5';
+
+	interval = window.setInterval(updateTimer, 1000);
+}
+
+function updateTimer() {
+	time.textContent = parseInt(time.textContent) - 1;
+
+	if (time.textContent === '0') {
+		clearInterval(interval);
+
+		if (isMatch()) {
+			score.textContent = parseInt(score.textContent) + 1;
+		}
+		else console.log('loss');
+
+		startLevel();
+	}
+}
+
+function isMatch() {
+	return square.y > canvas.width / 2;
 }
 
 function update() {

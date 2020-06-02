@@ -4,6 +4,7 @@
 
 body {
 	margin: 0;
+	font-size: 1.125rem;
 	font-family: sans-serif;
 	color: #353535;
 }
@@ -34,6 +35,18 @@ button {
 	cursor: pointer;
 	display: block;
 	border: none;
+}
+
+/* Timer */
+.timer {
+	text-align: center;
+	font-size: 1.5rem;
+	margin-bottom: 1.5em;
+}
+
+/* Score tracker */
+.score-tracker {
+	text-align: center;
 }
 
 /* Controls */
