@@ -170,8 +170,7 @@ function updateTimer() {
 
 		if (isMatch()) {
 			score.textContent = parseInt(score.textContent) + 1;
-		}
-		else console.log('loss');
+		} else console.log('loss');
 
 		startLevel();
 	}
