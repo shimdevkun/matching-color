@@ -11,6 +11,23 @@ let square = {
 	color: '#122345',
 };
 
+class Area {
+	constructor(x, y, w, h, color, isMatch) {
+		this.x = x;
+		this.y = y;
+		this.w = w;
+		this.h = h;
+
+		this.color = color;
+		this.isMatch = isMatch;
+	}
+}
+
+let areas = [
+	new Area(0, 0, canvas.width, canvas.height / 2, '#e0892b', false),
+	new Area(0, canvas.height / 2, canvas.width, canvas.height, '#122345', true),
+];
+
 let buttons = document.querySelectorAll('.btn');
 
 let time = document.querySelector('.time');
@@ -144,11 +161,10 @@ function newPos() {
 }
 
 function setUpLevel() {
-	ctx.fillStyle = '#e0892b';
-	ctx.fillRect(0, 0, canvas.width, canvas.width / 2);
-
-	ctx.fillStyle = '#122345';
-	ctx.fillRect(0, canvas.height / 2, canvas.width, canvas.height / 2);
+	areas.forEach((a) => {
+		ctx.fillStyle = a.color;
+		ctx.fillRect(a.x, a.y, a.w, a.h);
+	});
 }
 
 function startLevel() {
@@ -177,7 +193,29 @@ function updateTimer() {
 }
 
 function isMatch() {
-	return square.y > canvas.width / 2;
+	let areaMatch = areas.find((a) => a.isMatch);
+
+	// check if square is inside x axe
+	if (!isInsideXAxe(areaMatch)) return false;
+
+	// check if square is inside y axe
+	if (isInsideYAxe(areaMatch)) return true;
+
+	return false;
+}
+
+function isInsideXAxe(area) {
+	return (
+		square.x >= area.x &&
+		square.x + square.size <= area.x + area.w
+	);
+}
+
+function isInsideYAxe(area) {
+	return (
+		square.y >= area.y &&
+		square.y + square.size <= area.y + area.h
+	);
 }
 
 function update() {
