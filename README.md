@@ -12,6 +12,11 @@ This is a little canvas game where the player must position the square to match 
 - Track score
 - Option to restart the game after a victory or loss
 
+### V1.01
+
+**Fixes**
+- User can now move on mobile devices
+
 ## Please Note
 This project is ongoing and far from being finished.
 

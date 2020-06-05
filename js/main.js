@@ -95,7 +95,9 @@ document.addEventListener('keyup', keyUp);
 
 buttons.forEach((btn) => {
 	btn.addEventListener('mousedown', move);
+	btn.addEventListener('touchstart', move);
 	btn.addEventListener('mouseup', stop);
+	btn.addEventListener('touchend', stop);
 });
 
 btnRestart.addEventListener('click', startGame);
