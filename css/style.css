@@ -21,6 +21,10 @@ h5 {
 	line-height: 1.5em;
 }
 
+p {
+	margin: 0;
+}
+
 /* Layout */
 canvas {
 	display: block; /* inline by default */
@@ -42,6 +46,42 @@ button {
 	text-align: center;
 	font-size: 1.5rem;
 	margin-bottom: 1.5em;
+}
+
+/* Game */
+.game {
+	position: relative;
+}
+
+.pop-up {
+	width: 65%;
+	margin: 0 auto;
+
+	position: absolute;
+	top: 50%;
+	left: 0;
+	right: 0;
+	transform: translateY(-50%);
+
+	display: none;
+	flex-direction: column;
+	align-items: center;
+
+	padding: 1em 0;
+	background: #e8eee6;
+	border-radius: 10px;
+}
+
+.message {
+	margin-bottom: 1em;
+}
+
+.btn-restart {
+	padding: 0.85em 1.5em;
+	font-size: 1rem;
+	color: rgb(22, 73, 82);
+	background: #62b4d4;
+	border: 2px solid rgb(22, 73, 82);
 }
 
 /* Score tracker */

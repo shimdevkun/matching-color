@@ -1,16 +1,3 @@
-let canvas = document.querySelector('canvas');
-let ctx = canvas.getContext('2d');
-
-let square = {
-	size: 35,
-	x: 0,
-	y: 0,
-	dx: 0,
-	dy: 0,
-	speed: 6,
-	color: '#122345',
-};
-
 class Area {
 	constructor(x, y, w, h, color, isMatch) {
 		this.x = x;
@@ -23,10 +10,68 @@ class Area {
 	}
 }
 
+class Level {
+	constructor(areas) {
+		this.areas = areas;
+		this.match = areas.find((a) => a.isMatch);
+	}
+}
+
+class Game {
+	constructor(levels) {
+		this.currentLevel = 0;
+		this.levels = levels;
+	}
+}
+
+let canvas = document.querySelector('canvas');
+let ctx = canvas.getContext('2d');
+
+let square = {
+	size: 35,
+	x: 0,
+	y: 0,
+	dx: 0,
+	dy: 0,
+	speed: 6,
+};
+
 let areas = [
 	new Area(0, 0, canvas.width, canvas.height / 2, '#e0892b', false),
 	new Area(0, canvas.height / 2, canvas.width, canvas.height, '#122345', true),
 ];
+
+let areas2 = [
+	new Area(0, 0, canvas.width / 2, canvas.height / 2, '#e0892b', false),
+	new Area(
+		canvas.width / 2,
+		0,
+		canvas.width,
+		canvas.height / 2,
+		'#86db9b',
+		false
+	),
+	new Area(
+		0,
+		canvas.height / 2,
+		canvas.width / 2,
+		canvas.height,
+		'#122345',
+		false
+	),
+	new Area(
+		canvas.width / 2,
+		canvas.height / 2,
+		canvas.width,
+		canvas.height,
+		'#db72ac',
+		true
+	),
+];
+
+let levels = [new Level(areas), new Level(areas2)];
+
+let game = new Game(levels);
 
 let buttons = document.querySelectorAll('.btn');
 
@@ -34,6 +79,15 @@ let time = document.querySelector('.time');
 let interval = '';
 
 let score = document.querySelector('.score');
+
+let request;
+
+let popUp = document.querySelector('.pop-up');
+let btnRestart = document.querySelector('.btn-restart');
+
+let message = document.querySelector('.message');
+const VICTORY = 'Congrats, you won!';
+const DEFEAT = 'You lost :c';
 
 // Events
 document.addEventListener('keydown', keyDown);
@@ -44,23 +98,65 @@ buttons.forEach((btn) => {
 	btn.addEventListener('mouseup', stop);
 });
 
-update();
-setUpLevel();
-startLevel();
+btnRestart.addEventListener('click', startGame);
+
+startGame();
 
 // Functions
-function drawSquare() {
-	ctx.fillStyle = square.color;
-	ctx.fillRect(square.x, square.y, square.size, square.size);
+function startGame() {
+	popUp.style.display = 'none';
+	game.currentLevel = 0;
+	score.textContent = 0;
 
-	ctx.strokeStyle = '#94cfff';
-	ctx.strokeRect(square.x, square.y, square.size, square.size);
+	update();
+	startLevel();
+}
+
+function update() {
+	clear();
+
+	drawSquare();
+
+	newPos();
+
+	request = requestAnimationFrame(update);
 }
 
 function clear() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 	setUpLevel();
+}
+
+function setUpLevel() {
+	let index = game.currentLevel;
+	let gameAreas = game.levels[index].areas;
+
+	gameAreas.forEach((a) => {
+		ctx.fillStyle = a.color;
+		ctx.fillRect(a.x, a.y, a.w, a.h);
+	});
+}
+
+function startLevel() {
+	square.x = 0;
+	square.y = 0;
+	square.dx = 0;
+	square.dy = 0;
+
+	time.textContent = '5';
+
+	interval = window.setInterval(updateTimer, 1000);
+}
+
+function drawSquare() {
+	let index = game.currentLevel;
+
+	ctx.fillStyle = game.levels[index].match.color;
+	ctx.fillRect(square.x, square.y, square.size, square.size);
+
+	ctx.strokeStyle = '#94cfff';
+	ctx.strokeRect(square.x, square.y, square.size, square.size);
 }
 
 function keyDown(e) {
@@ -160,24 +256,6 @@ function newPos() {
 	checkCollision();
 }
 
-function setUpLevel() {
-	areas.forEach((a) => {
-		ctx.fillStyle = a.color;
-		ctx.fillRect(a.x, a.y, a.w, a.h);
-	});
-}
-
-function startLevel() {
-	square.x = 0;
-	square.y = 0;
-	square.dx = 0;
-	square.dy = 0;
-
-	time.textContent = '5';
-
-	interval = window.setInterval(updateTimer, 1000);
-}
-
 function updateTimer() {
 	time.textContent = parseInt(time.textContent) - 1;
 
@@ -186,14 +264,27 @@ function updateTimer() {
 
 		if (isMatch()) {
 			score.textContent = parseInt(score.textContent) + 1;
-		} else console.log('loss');
+			game.currentLevel++;
 
-		startLevel();
+			if (gameEnded()) {
+				window.cancelAnimationFrame(request);
+				message.textContent = VICTORY;
+				popUp.style.display = 'flex';
+				return;
+			}
+			startLevel();
+		} else {
+			window.cancelAnimationFrame(request);
+			message.textContent = DEFEAT;
+			popUp.style.display = 'flex';
+			return;
+		}
 	}
 }
 
 function isMatch() {
-	let areaMatch = areas.find((a) => a.isMatch);
+	let index = game.currentLevel;
+	let areaMatch = game.levels[index].match;
 
 	// check if square is inside x axe
 	if (!isInsideXAxe(areaMatch)) return false;
@@ -205,25 +296,13 @@ function isMatch() {
 }
 
 function isInsideXAxe(area) {
-	return (
-		square.x >= area.x &&
-		square.x + square.size <= area.x + area.w
-	);
+	return square.x >= area.x && square.x + square.size <= area.x + area.w;
 }
 
 function isInsideYAxe(area) {
-	return (
-		square.y >= area.y &&
-		square.y + square.size <= area.y + area.h
-	);
+	return square.y >= area.y && square.y + square.size <= area.y + area.h;
 }
 
-function update() {
-	clear();
-
-	drawSquare();
-
-	newPos();
-
-	requestAnimationFrame(update);
+function gameEnded() {
+	return game.currentLevel >= game.levels.length;
 }
