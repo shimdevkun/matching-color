@@ -2,6 +2,8 @@
 
 This is a little canvas game where the player must position the square to match its color.
 
+See the live version [here](https://matching-color.sshimabuku.now.sh/)
+
 ## Versions
 
 ### V1.0
@@ -17,8 +19,6 @@ This is a little canvas game where the player must position the square to match 
 **Fixes**
 - User can now move on mobile devices
 
-## Please Note
-This project is ongoing and far from being finished.
+## Incoming features
 
-Here's a list of high priority incoming features/bugfixes:
 - Add more levels
